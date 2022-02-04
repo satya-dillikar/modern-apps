@@ -14,7 +14,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - go-mod-v4-{{ checksum "distributed_apps/http_json_rest/go.sum" }}
+            - go-mod-v4-{{ checksum "distributed_apps/http_json_rest/go.mod" }}
       - run:
           name: Install Dependencies
           # command: go get ./...
@@ -30,7 +30,7 @@ jobs:
             cd distributed_apps/http_json_rest
             CGO_ENABLED=0 go build -a -o bin/server_main ./client/server_main.go   
       - save_cache:
-          key: go-mod-v4-{{ checksum "distributed_apps/http_json_rest/go.sum" }}
+          key: go-mod-v4-{{ checksum "distributed_apps/http_json_rest/go.mod" }}
           paths:
             - "/go/pkg/mod"
       - run:
