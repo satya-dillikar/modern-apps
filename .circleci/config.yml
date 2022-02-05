@@ -30,7 +30,7 @@ jobs:
           name: "Building Server"
           command: |
             cd distributed_apps/http_json_rest
-            CGO_ENABLED=0 go build -a -o bin/server_main ./client/server_main.go   
+            CGO_ENABLED=0 go build -a -o bin/server_main ./server/server_main.go   
       - save_cache:
           key: go-mod-v4-{{ checksum "distributed_apps/http_json_rest/go.mod" }}
           paths:
@@ -39,24 +39,32 @@ jobs:
           name: Run tests
           command: |
             cd distributed_apps/http_json_rest
-            go test -v
+            go test -v -race ./...
   lint:
     docker:
       - image: golangci/golangci-lint:v1.37-alpine
-    working_directory: /go/src/modern-apps      
+    working_directory: ~/modern-apps      
     steps:
       - checkout
-      - run: golangci-lint run
+      - run:
+          name: "Linting files"
+          command: |
+            cd distributed_apps/http_json_rest
+            golangci-lint run
   test:
     docker:
       # We use golang:1.16 instead of golang:1.16-alpine because we want to run
       # tests with the race detector enabled. The race detector requires glibc,
       # which is only present in the Debian-based containers.
       - image: circleci/golang:1.16-alpine
-    working_directory: /go/src/modern-apps
+    working_directory: ~/modern-apps
     steps:
       - checkout
-      - run: go test -v -race ./...
+      - run:
+          name: Run tests
+          command: |
+            cd distributed_apps/http_json_rest
+            go test -v -race ./...
 
 workflows:
   build_lint_test:
