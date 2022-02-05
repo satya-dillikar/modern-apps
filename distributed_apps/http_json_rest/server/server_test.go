@@ -41,7 +41,7 @@ func TestHomeHandler(t *testing.T) {
 
 	decoder := json.NewDecoder(res.Body)
 	var str messages.JsonResponse
-	decoder.Decode(&t)
+	_ = decoder.Decode(&t)
 	log.Println("Got response string : ", str.JsonResponseString)
 
 	// if string(data) != "ABC" {
