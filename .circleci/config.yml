@@ -1,26 +1,74 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
+# .circleci/config.yml
+
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  # This build job just tests that the binary can build. If your project is a
+  # library, not a binary, you don't need this build job. In other words, omit
+  # this job if you don't have a func main() in your project.
+  build:
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: circleci/golang:1.15.8
+    working_directory: ~/modern-apps
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "distributed_apps/http_json_rest/go.mod" }}
+      - run:
+          name: Install Dependencies
+          # command: go get ./...
+          command: |
+            cd distributed_apps/http_json_rest
+            go mod download          
+      - run:
+          name: "Building Client"
+          command: |
+            cd distributed_apps/http_json_rest
+            CGO_ENABLED=0 go build -a -o bin/client_main ./client/client_main.go          
+      - run:
+          name: "Building Server"
+          command: |
+            cd distributed_apps/http_json_rest
+            CGO_ENABLED=0 go build -a -o bin/server_main ./server/server_main.go   
+      - save_cache:
+          key: go-mod-v4-{{ checksum "distributed_apps/http_json_rest/go.mod" }}
+          paths:
+            - "/go/pkg/mod"
+      - run:
+          name: Run tests
+          command: |
+            cd distributed_apps/http_json_rest
+            go test -v -race ./...
+  lint:
+    docker:
+      - image: golangci/golangci-lint:v1.37-alpine
+    working_directory: ~/modern-apps      
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: "Linting files"
+          command: |
+            cd distributed_apps/http_json_rest
+            golangci-lint run
+  test:
+    docker:
+      # We use golang:1.16 instead of golang:1.16-alpine because we want to run
+      # tests with the race detector enabled. The race detector requires glibc,
+      # which is only present in the Debian-based containers.
+      - image: golang:1.16
+    working_directory: ~/modern-apps
+    steps:
+      - checkout
+      - run:
+          name: Run tests
+          command: |
+            cd distributed_apps/http_json_rest
+            go test -v -race ./...
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build_lint_test:
     jobs:
-      - say-hello
+      - build
+      - lint
+      - test
