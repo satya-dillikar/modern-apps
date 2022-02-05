@@ -18,6 +18,7 @@ jobs:
       - run:
           name: Install Dependencies
           # command: go get ./...
+          cd distributed_apps/http_json_rest
           command: go mod download          
       - run:
           name: "Building Client"
