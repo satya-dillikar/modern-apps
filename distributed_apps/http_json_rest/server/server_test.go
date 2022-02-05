@@ -6,8 +6,9 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
-	"satya.com/http_json_rest/messages"
 	"testing"
+
+	"satya.com/http_json_rest/messages"
 )
 
 /*
@@ -41,7 +42,7 @@ func TestHomeHandler(t *testing.T) {
 
 	decoder := json.NewDecoder(res.Body)
 	var str messages.JsonResponse
-	decoder.Decode(&t)
+	_ = decoder.Decode(&t)
 	log.Println("Got response string : ", str.JsonResponseString)
 
 	// if string(data) != "ABC" {

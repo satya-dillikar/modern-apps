@@ -55,7 +55,7 @@ func connectToCluster(myIp string, clusterip string) {
 		// fmt.Printf("%s\n", body)
 		decoder := json.NewDecoder(resp.Body)
 		var t messages.JsonResponse
-		decoder.Decode(&t)
+		_ = decoder.Decode(&t)
 		fmt.Println("Got response string : ", t.JsonResponseString)
 	}
 }

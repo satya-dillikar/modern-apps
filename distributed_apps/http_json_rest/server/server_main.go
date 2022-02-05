@@ -30,19 +30,19 @@ func startHttpServer() {
 	http.HandleFunc("/", homeHandler)
 	myIpAddrs, _ := net.InterfaceAddrs()
 	me = messages.NodeInfo{NodeId: -1, NodeIpAddr: myIpAddrs[0].String(), Port: "9001"}
-	http.ListenAndServe(":9001", nil)
+	_ = http.ListenAndServe(":9001", nil)
 }
 
 func queryHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var t messages.JsonRequest
-	decoder.Decode(&t)
+	_ = decoder.Decode(&t)
 	fmt.Println("Got request string : ", t.JsonRequestString)
 
 	responseJson := messages.JsonResponse{
 		JsonResponseString: "query result from server:" + t.JsonRequestString,
 	}
-	json.NewEncoder(w).Encode(responseJson)
+	_ = json.NewEncoder(w).Encode(responseJson)
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
