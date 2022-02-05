@@ -56,7 +56,7 @@ jobs:
       # We use golang:1.16 instead of golang:1.16-alpine because we want to run
       # tests with the race detector enabled. The race detector requires glibc,
       # which is only present in the Debian-based containers.
-      - image: circleci/golang:1.16-alpine
+      - image: golang:1.16
     working_directory: ~/modern-apps
     steps:
       - checkout
