@@ -16,7 +16,7 @@ parameters:
     default: "dsatya6"
   DOCKER_PASSWORD:
     type: string
-    default: "e363f6ff-fa3c-443a-a2a4-0c42fe6e8692"
+    default: "PATTOKEN"
 
 ## Definitions
 common_envars: &common_envars
