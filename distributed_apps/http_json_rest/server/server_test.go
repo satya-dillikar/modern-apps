@@ -6,8 +6,9 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
-	"satya.com/http_json_rest/messages"
 	"testing"
+
+	"satya.com/http_json_rest/messages"
 )
 
 /*
