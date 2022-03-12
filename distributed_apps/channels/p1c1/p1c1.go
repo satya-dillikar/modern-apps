@@ -1,4 +1,4 @@
-package main
+package p1c1
 
 import (
 	"fmt"
@@ -46,7 +46,7 @@ func consumer(id int, link <-chan string, done chan<- bool) {
 	done <- true
 }
 
-func main() {
+func P1c1_main() {
 	fmt.Println("No of messages:", len(messages))
 	fmt.Printf("START: glbConsumedCount:%v, glbProducedCount:%v\n",
 		glbConsumedCount, glbProducedCount)

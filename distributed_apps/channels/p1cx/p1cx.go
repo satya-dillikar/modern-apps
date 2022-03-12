@@ -1,4 +1,4 @@
-package main
+package p1cx
 
 import (
 	"fmt"
@@ -28,36 +28,17 @@ var messages = []string{
 	"19-msg",
 }
 
-const producerCount int = 3
-const consumerCount int = 2
+const consumerCount int = 3
 
 var glbConsumedCount int = 0
 var glbProducedCount int = 0
 
-func msgLen(messages [][]string, pcnt int) int {
-	lenCount := 0
-	if pcnt > producerCount {
-		return -1
-	}
-	for i := 0; i < producerCount; i++ {
-		msgs := messages[i]
-		lenCount += len(msgs)
-	}
-	return lenCount
-}
-
-func producer(id int, link chan<- string, wg *sync.WaitGroup) {
-	defer wg.Done()
-	start := id * producerCount
-	end := start + len(messages)/producerCount
-	if end > len(messages) {
-		end = len(messages)
-	}
-	for i := start; i < end; i++ {
-		m := messages[i]
+func producer(id int, link chan<- string) {
+	for _, m := range messages {
 		link <- "produced-by-" + strconv.Itoa(id) + ":" + m
 		glbProducedCount++
 	}
+	close(link)
 }
 
 func consumer(id int, link <-chan string, wg *sync.WaitGroup) {
@@ -68,26 +49,21 @@ func consumer(id int, link <-chan string, wg *sync.WaitGroup) {
 	}
 }
 
-func main() {
+func P1cx_main() {
 	fmt.Println("No of messages:", len(messages))
 	fmt.Printf("START: glbConsumedCount:%v, glbProducedCount:%v\n",
 		glbConsumedCount, glbProducedCount)
-
 	link := make(chan string)
-	wp := sync.WaitGroup{}
-	wc := sync.WaitGroup{}
+	//done := make(chan bool)
+	wg := sync.WaitGroup{}
 
-	for i := 0; i < producerCount; i++ {
-		wp.Add(1)
-		go producer(i, link, &wp)
+	go producer(1, link)
+	for i := 0; i < consumerCount; i++ {
+		wg.Add(1)
+		go consumer(i, link, &wg)
 	}
-	for i := 0; i < producerCount; i++ {
-		wc.Add(1)
-		go consumer(i, link, &wc)
-	}
-	wp.Wait()
-	close(link)
-	wc.Wait()
+	wg.Wait()
+	//<-done
 	fmt.Printf("END: glbConsumedCount:%v, glbProducedCount:%v\n",
 		glbConsumedCount, glbProducedCount)
 }

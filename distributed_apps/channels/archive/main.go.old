@@ -1,0 +1,37 @@
+package main
+
+import (
+	"fmt"
+
+	"satya.com/producer_consumer/p1c1"
+	"satya.com/producer_consumer/p1cx"
+	"satya.com/producer_consumer/pxc1"
+	"satya.com/producer_consumer/pxcx_chan"
+	"satya.com/producer_consumer/pxcx_intf"
+	// "satya.com/producer_consumer/pxcx_mem"
+	// "satya.com/producer_consumer/pxcx_v1"
+	// "satya.com/producer_consumer/pxcx_v2"
+	// "satya.com/producer_consumer/pxcx_v3"
+)
+
+func main() {
+	fmt.Println("\nCalling P1c1_main ...\n")
+	p1c1.P1c1_main()
+	fmt.Println("\nCalling P1cx_main ...\n")
+	p1cx.P1cx_main()
+	fmt.Println("\nCalling Pxc1_main ...\n")
+	pxc1.Pxc1_main()
+	fmt.Println("\nCalling Pxcx_chan_main ...\n")
+	pxcx_chan.Pxcx_chan_main()
+	// fmt.Println("\nCalling Pxcx_mem_main ...\n")
+	// pxcx_mem.Pxcx_mem_main()
+	// fmt.Println("\nCalling Pxcx_v1_main ...\n")
+	// pxcx_v1.Pxcx_v1_main()
+	// fmt.Println("\nCalling Pxcx_v2_main ...\n")
+	// pxcx_v2.Pxcx_v2_main()
+	// fmt.Println("\nCalling Pxcx_v3_main ...\n")
+	// pxcx_v3.Pxcx_v3_main()
+	fmt.Println("\nCalling Pxcx_intf_main ...\n")
+	pxcx_intf.Pxcx_intf_main()
+	fmt.Println("\nDONE.\n")
+}

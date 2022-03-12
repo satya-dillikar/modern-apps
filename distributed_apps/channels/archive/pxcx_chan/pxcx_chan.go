@@ -1,4 +1,4 @@
-package main
+package pxcx_chan
 
 import (
 	"fmt"
@@ -99,7 +99,7 @@ func (m *multiProducerMultiConsumer) startConsumers() {
 	}
 }
 
-func main() {
+func Pxcx_chan_main() {
 
 	var m multiProducerMultiConsumer
 	m.init(3, 3, messages)

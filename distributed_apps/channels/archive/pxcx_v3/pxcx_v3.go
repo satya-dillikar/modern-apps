@@ -1,4 +1,4 @@
-package main
+package pxcx_v3
 
 import (
 	"fmt"
@@ -79,7 +79,7 @@ func consumer(id int, link <-chan string, wg *sync.WaitGroup) {
 	}
 }
 
-func main() {
+func Pxcx_v3_main() {
 	//fmt.Println("No of messages:", msgLen(messages, producerCount))
 	fmt.Println("No of messages:", len(messages))
 

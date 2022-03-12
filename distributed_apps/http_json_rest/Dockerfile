@@ -1,21 +1,26 @@
-FROM golang:1.16-alpine as builder
+ARG ALPINE_VERSION=3.14
+ARG GO_VERSION=1.16
 
-RUN mkdir -p /http_json_rest/
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} as builder
 
-WORKDIR /http_json_rest
+WORKDIR /go_app
 
 COPY . .
+
+ENV GO111MODULE=on
+
+ENV PORT=9001
 
 RUN go mod download
 
 RUN CGO_ENABLED=0 go build -a -o bin/server_main ./server/server_main.go
 
-RUN CGO_ENABLED=0 go build -a -o bin/client_main ./client/client_main.go
-
-FROM alpine:3.14
+FROM alpine:${ALPINE_VERSION}
 
 WORKDIR /home/app
 
-COPY --from=builder /http_json_rest/bin/server_main .
+COPY --from=builder /go_app/bin/server_main .
+
+EXPOSE 9001
 
 CMD ["./server_main"]

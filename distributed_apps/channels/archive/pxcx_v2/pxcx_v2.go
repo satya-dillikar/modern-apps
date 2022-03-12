@@ -1,4 +1,4 @@
-package main
+package pxcx_v2
 
 import (
 	"fmt"
@@ -82,7 +82,7 @@ func consume(id int, workerPool <-chan *producers) {
 	}
 }
 
-func main() {
+func Pxcx_v2_main() {
 	var workers []*producers
 
 	jobQ := make(chan string)

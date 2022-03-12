@@ -1,5 +1,5 @@
 
-NAME:=http_json_rest
+NAME:=dapp-http-json-rest
 DOCKER_REPOSITORY:=dsatya6
 DOCKER_IMAGE_NAME:=$(DOCKER_REPOSITORY)/$(NAME)
 VERSION:=0.1.0
@@ -9,20 +9,35 @@ VERSION:=0.1.0
 build :
 	go build -o bin/server_main ./server/server_main.go
 	go build -o bin/client_main ./client/client_main.go
+
 clean :
 	@rm bin/*
+	@rm -rf Godeps
+	@rm -rf go.sum
+	@go mod tidy
 
 test:
-	go test -v ./...  
+	go test -v ./...
+	./bin/server_main &
+	@sleep 5
+	# ./bin/client_main
+	# @sleep 5
+	curl -s localhost:9001 | grep Me
 
 build-container :
-	@docker build -t dsatya6/http_json_rest:$(VERSION) .
+	@docker build -t dsatya6/$(NAME):$(VERSION) .
 
 push-container :
-	@docker push dsatya6/http_json_rest:$(VERSION)	
+	@docker push dsatya6/$(NAME):$(VERSION)
 
 test-container :
-	@docker rm -f http_json_rest || true
-	@docker run -dp 9001:9001 --name=http_json_rest $(DOCKER_IMAGE_NAME):$(VERSION)
+	@docker rm -f $(NAME) || true
+	@docker run -dp 9001:9001 --name=$(NAME) $(DOCKER_IMAGE_NAME):$(VERSION)
 	@docker ps
-	curl -s localhost:9001 | grep Me	
+	@sleep 5
+	@echo  ""
+	curl -s localhost:9001 | grep Me
+	@echo  ""
+	@sleep 2
+	@docker stop $(NAME) || true
+	@docker rm -f $(NAME) || true	

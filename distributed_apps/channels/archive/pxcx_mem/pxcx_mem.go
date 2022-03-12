@@ -1,4 +1,4 @@
-package main
+package pxcx_mem
 
 import (
 	"fmt"
@@ -157,7 +157,7 @@ func (m *multiProducerMultiConsumer) startConsumers() {
 	}
 }
 
-func main() {
+func Pxcx_mem_main() {
 
 	var m multiProducerMultiConsumer
 	m.init(4, 2, messages)

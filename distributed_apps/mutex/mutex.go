@@ -33,12 +33,13 @@ func process(n int) {
 }
 
 func main() {
+	fmt.Println("Wait for 50 secs...")
 	//loop calling the process() 3 times
 	for i := 0; i < 4; i++ {
 		go process(i)
 	}
 
 	//delay to wait for the routines to complete
-	time.Sleep(25 * time.Second)
+	time.Sleep(45 * time.Second)
 	fmt.Println("Final Count:", count)
 }
