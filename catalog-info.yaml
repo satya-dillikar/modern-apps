@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: modern-apps
+  annotations:
+    github.com/project-slug: satya-dillikar/modern-apps
+spec:
+  type: other
+  lifecycle: unknown
+  owner: satya-dillikar
